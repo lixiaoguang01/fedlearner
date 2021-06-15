@@ -1,5 +1,12 @@
 #!/bin/bash
+set -ex
+
+BASE_DIR=`dirname $0`
+cd $BASE_DIR
+
 export CUDA_VISIBLE_DEVICES=""
+
+rm -rf data model
 
 python make_data.py
 
@@ -21,5 +28,5 @@ python follower.py --local-addr=localhost:50052     \
 
 wait
 
-rm -rf data log
+rm -rf data model
 echo "test done"
