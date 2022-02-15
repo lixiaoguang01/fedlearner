@@ -15,6 +15,7 @@
 import re
 import tensorflow.compat.v1 as tf
 from tensorflow.python.training import training_util #pylint: disable=no-name-in-module
+from fedlearner.common import metrics
 from fedlearner.trainer._global_context import global_context as _gctx
 
 class GlobalStepMetricTensorHook(tf.train.SessionRunHook):
@@ -92,6 +93,9 @@ class GlobalStepMetricTensorHook(tf.train.SessionRunHook):
                            value.sum(),
                            tags={"metric": key})
 
+                # for compatibility, also write to metrics(es)
+                metrics.emit_store(name=key, value=value, tags={})
+
 
 class StepMetricsHook(GlobalStepMetricTensorHook):
     """
@@ -114,6 +118,7 @@ class StepLossAucMetricsHook(GlobalStepMetricTensorHook):
                                                      every_steps=every_n_iter)
 
 
+# NOTE(whisylan): maybe lead to memory leak
 class TraceStatsHook(tf.train.SessionRunHook):
     def __init__(self,
                  timing_topn=20,
