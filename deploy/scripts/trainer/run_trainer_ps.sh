@@ -21,5 +21,6 @@ source /app/deploy/scripts/hdfs_common.sh || true
 source /app/deploy/scripts/pre_start_hook.sh || true
 
 cp /app/sgx/gramine/CI-Examples/tensorflow_io.py ./
+unset HTTPS_PROXY https_proxy http_proxy ftp_proxy
 
 python -m fedlearner.trainer.parameter_server $POD_IP:50051 
